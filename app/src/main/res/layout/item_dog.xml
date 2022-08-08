@@ -20,7 +20,7 @@
             android:padding="15dp">
 
             <ImageView
-                android:id="@+id/textView"
+                android:id="@+id/dogImageView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -36,7 +36,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/titleTV"
+                    android:id="@+id/dogNameTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -44,7 +44,7 @@
                     tools:text="Dog Name"
                     style="@style/TitleStyle"/>
                 <TextView
-                    android:id="@+id/textTV"
+                    android:id="@+id/dogLifespanTV"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
