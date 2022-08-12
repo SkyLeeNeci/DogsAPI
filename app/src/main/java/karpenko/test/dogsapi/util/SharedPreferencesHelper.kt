@@ -38,5 +38,7 @@ class SharedPreferencesHelper {
 
     fun getLastUpdateTime() = sharedPrefs?.getLong(TIME, 0)
 
+    fun getUpdateDuration() =
+        sharedPrefs?.getString("pref_update_duration", "")
 
 }
