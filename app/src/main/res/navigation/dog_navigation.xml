@@ -28,7 +28,7 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
-            android:name="dogUuid"
+            android:name="uuid"
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
