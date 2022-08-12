@@ -2,14 +2,16 @@ package karpenko.test.dogsapi.view
 
 import android.opengl.Visibility
 import android.os.Bundle
+import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import karpenko.test.dogsapi.R
 import karpenko.test.dogsapi.databinding.FragmentDogsListBinding
 import karpenko.test.dogsapi.viewmodel.DogsListViewModel
 import kotlinx.android.synthetic.main.fragment_dogs_list.*
@@ -29,16 +31,34 @@ class DogsListFragment : Fragment() {
     private val binding: FragmentDogsListBinding
         get() = _binding ?: throw RuntimeException("FragmentDogsListBinding = null")
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().addMenuProvider(object : MenuProvider{
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when(menuItem.itemId){
+                    R.id.settingsMenuItem -> {
+                        findNavController().navigate(R.id.action_dogsListFragment_to_settingsFragment)
+                    }
+                }
+                return true
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
         _binding = FragmentDogsListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         viewModel.refresh()
         binding.dogsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -83,6 +103,7 @@ class DogsListFragment : Fragment() {
         }
 
     }
+
 
 
 }

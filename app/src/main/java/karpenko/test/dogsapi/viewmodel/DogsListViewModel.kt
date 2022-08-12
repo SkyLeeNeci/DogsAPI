@@ -3,12 +3,9 @@ package karpenko.test.dogsapi.viewmodel
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -18,6 +15,7 @@ import karpenko.test.dogsapi.model.DogsApiService
 import karpenko.test.dogsapi.util.NotificationHelper
 import karpenko.test.dogsapi.util.SharedPreferencesHelper
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 
 class DogsListViewModel(application: Application): BaseViewModel(application) {
 
@@ -41,6 +39,7 @@ class DogsListViewModel(application: Application): BaseViewModel(application) {
 
 
     fun refresh(){
+        checkUpdateDuration()
         val updateTime = sharedPrefHelper.getLastUpdateTime()
         if (updateTime != 0L && updateTime != null && System.nanoTime()-updateTime < REFRESH_TIME){
             fetchFromDatabase()
@@ -82,6 +81,18 @@ class DogsListViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
+    private fun checkUpdateDuration(){
+
+        val pref = sharedPrefHelper.getUpdateDuration()
+
+        try {
+            val prefUpdateInt = pref?.toInt() ?: 10
+            REFRESH_TIME = refreshTime(prefUpdateInt)
+        }catch (e: NumberFormatException){
+            e.printStackTrace()
+        }
+    }
+
     private fun dogsRetrieved(dogList: List<DogBreed>){
         _listOfDogs.value = dogList
         _dogsLoadError.value = false
@@ -109,7 +120,11 @@ class DogsListViewModel(application: Application): BaseViewModel(application) {
     }
 
     companion object{
-        private const val REFRESH_TIME = 10*1000*1000*1000L
+        private var REFRESH_TIME = 10*1000*1000*1000L
+
+        private fun refreshTime(int: Int): Long {
+            return int * 1000 * 1000 * 1000L
+        }
     }
 
 }
