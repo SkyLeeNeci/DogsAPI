@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import karpenko.test.dogsapi.model.DogBreed
 import karpenko.test.dogsapi.model.DogDatabase
 import karpenko.test.dogsapi.model.DogsApiService
+import karpenko.test.dogsapi.util.NotificationHelper
 import karpenko.test.dogsapi.util.SharedPreferencesHelper
 import kotlinx.coroutines.launch
 
@@ -56,6 +57,7 @@ class DogsListViewModel(application: Application): BaseViewModel(application) {
                 override fun onSuccess(dogList: List<DogBreed>) {
                     storeDogLocally(dogList)
                     Toast.makeText(getApplication(), "fetchFromRemote", Toast.LENGTH_SHORT).show()
+                    NotificationHelper(getApplication()).createNotification()
                 }
 
                 override fun onError(e: Throwable) {
